@@ -1,0 +1,198 @@
+!DOCTYPE html><html lang="ru"> <head> <meta charset="UTF-8"> <title>Табель посещаемости и питания — этап 1</title> <style> :root { --primary: #1a3d6d; --primary-light: #e8eefb; --accent: #2a5599; --ok: #2e7d32; --ok-bg: #e8f5e9; --warn: #b26500; --warn-bg: #fff4e0; --danger: #b71c1c; --danger-bg: #fdecea; --border: #d0d7e2; --bg: #f6f8fc; --text: #1f2430; --muted: #667085; } * { box-sizing: border-box; } body { font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 32px 20px 60px; color: var(--text); line-height: 1.5; background: radial-gradient(circle at 10% 0%, #eef3fb 0%, transparent 40%), radial-gradient(circle at 90% 100%, #f0f4ff 0%, transparent 40%), var(--bg); min-height: 100vh; } .container { max-width: 1080px; margin: 0 auto; }
+h1 {
+font-size: 28px;
+color: var(--primary);
+margin: 0 0 6px;
+letter-spacing: -0.3px;
+}
+.subtitle {
+color: var(--muted);
+font-size: 15px;
+margin-bottom: 28px;
+}
+h2 {
+color: var(--primary);
+font-size: 20px;
+margin: 36px 0 14px;
+padding-bottom: 8px;
+border-bottom: 2px solid var(--primary-light);
+display: flex;
+align-items: center;
+gap: 10px;
+}
+h2 .num {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 28px; height: 28px;
+background: var(--primary);
+color: #fff;
+border-radius: 8px;
+font-size: 14px;
+font-weight: 600;
+}
+h3 { color: var(--accent); font-size: 16px; margin: 22px 0 10px; }
+
+p { margin: 10px 0; }
+
+/* Таблицы */
+table {
+width: 100%;
+border-collapse: separate;
+border-spacing: 0;
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 12px;
+overflow: hidden;
+margin: 14px 0 20px;
+font-size: 14px;
+box-shadow: 0 2px 6px rgba(26, 61, 109, 0.06);
+}
+caption {
+text-align: left;
+font-weight: 600;
+color: var(--primary);
+padding: 0 0 8px;
+font-size: 14px;
+caption-side: top;
+}
+th, td {
+padding: 10px 14px;
+text-align: left;
+vertical-align: top;
+border-bottom: 1px solid var(--border);
+}
+th {
+background: var(--primary-light);
+color: var(--primary);
+font-weight: 600;
+font-size: 13px;
+text-transform: uppercase;
+letter-spacing: 0.3px;
+}
+tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #f9fbff; }
+
+/* Блоки-выводы */
+.callout {
+border-radius: 12px;
+padding: 16px 20px;
+margin: 16px 0;
+border-left: 4px solid;
+font-size: 14px;
+}
+.callout.ok { background: var(--ok-bg); border-color: var(--ok); }
+.callout.warn { background: var(--warn-bg); border-color: var(--warn); }
+.callout.danger { background: var(--danger-bg); border-color: var(--danger); }
+.callout strong { display: block; margin-bottom: 6px; font-size: 15px; }
+.callout.ok strong { color: var(--ok); }
+.callout.warn strong { color: var(--warn); }
+.callout.danger strong { color: var(--danger); }
+
+/* Код */
+pre {
+background: #0f172a;
+color: #d6dbe4;
+padding: 16px 18px;
+border-radius: 12px;
+overflow-x: auto;
+font-size: 13px;
+line-height: 1.55;
+margin: 12px 0 20px;
+box-shadow: inset 0 0 0 1px #1e293b;
+}
+code {
+font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+:not(pre) > code {
+background: var(--primary-light);
+color: var(--primary);
+padding: 2px 6px;
+border-radius: 4px;
+font-size: 0.9em;
+}
+
+/* Бейджи статусов */
+.badge {
+display: inline-block;
+padding: 2px 10px;
+border-radius: 999px;
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 0.2px;
+}
+.badge.active { background: #e8f5e9; color: #2e7d32; }
+.badge.later { background: #e3f2fd; color: #1565c0; }
+.badge.expelled { background: #fdecea; color: #b71c1c; }
+.badge.transferred { background: #fff4e0; color: #b26500; }
+.badge.svo { background: #f3e5f5; color: #6a1b9a; }
+
+/* Списки */
+ol, ul { margin: 10px 0 10px 22px; padding: 0; }
+li { margin: 6px 0; }
+
+/* Карточка-плашка в начале */
+.hero {
+background: linear-gradient(135deg, #1a3d6d 0%, #2a5599 100%);
+color: #fff;
+border-radius: 16px;
+padding: 24px 28px;
+margin-bottom: 8px;
+box-shadow: 0 8px 24px rgba(26, 61, 109, 0.18);
+}
+.hero h1 { color: #fff; margin-bottom: 8px; }
+.hero .subtitle { color: #c8d6ee; margin: 0; }
+.hero .chips { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+.hero .chip {
+background: rgba(255,255,255,0.14);
+color: #eaf1fb;
+padding: 5px 12px;
+border-radius: 999px;
+font-size: 12px;
+border: 1px solid rgba(255,255,255,0.22);
+}
+
+/* Мини-план */
+.plan {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+gap: 12px;
+margin: 16px 0;
+}
+.plan .step {
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 12px;
+padding: 14px;
+position: relative;
+box-shadow: 0 2px 6px rgba(26, 61, 109, 0.05);
+}
+.plan .step .idx {
+display: inline-block;
+background: var(--primary-light);
+color: var(--primary);
+font-weight: 700;
+font-size: 12px;
+border-radius: 6px;
+padding: 2px 8px;
+margin-bottom: 6px;
+}
+.plan .step strong { display: block; color: var(--primary); margin-bottom: 4px; }
+.plan .step span { font-size: 13px; color: var(--muted); }
+
+/* Финальный акцент */
+.cta {
+background: linear-gradient(135deg, #2a5599 0%, #1a3d6d 100%);
+color: #fff;
+border-radius: 14px;
+padding: 18px 22px;
+margin-top: 30px;
+font-size: 15px;
+box-shadow: 0 6px 20px rgba(26, 61, 109, 0.2);
+}
+.cta strong { color: #ffd76a; }
+</style>
+
+</head> <body><div class="container"> <div class="hero"> <h1>Табель посещаемости и питания</h1> <p class="subtitle">Этап 1 — архитектура, схема данных и приём входных материалов</p> <div class="chips"> <span class="chip">HTML + CSS + JS</span> <span class="chip">Google Sheets (CSV)</span> <span class="chip">IndexedDB</span> <span class="chip">Экспорт HTML / XLS / PDF</span> </div> </div> <!-- 1. Архитектура принята --> <h2><span class="num">1</span> Архитектура принята</h2> <div class="callout ok"> <strong>Что зафиксировали</strong> Работаем на чистом HTML + CSS + JS, один файл, без сервера и внешних библиотек. Данные — в <code>localStorage</code> (настройки) + <code>IndexedDB</code> (студенты, отметки, справки). Источник — Google Sheets по опубликованной CSV-ссылке (fallback — gviz). Экспорт — HTML, .xls (Blob), PDF (print-CSS). </div> <!-- 2. Схема данных --> <h2><span class="num">2</span> Схема данных</h2> <table border="1"> <caption>Сущности и поля</caption> <tr> <th>Сущность</th><th>Поле</th><th>Тип</th><th>Обяз.</th><th>Описание</th> </tr> <tr> <td rowspan="8"><strong>Student</strong></td> <td>id</td><td>uuid</td><td>да</td><td>внутренний ID</td> </tr> <tr><td>order_no</td><td>number</td><td>да</td><td>№ в журнале</td></tr> <tr><td>fullName</td><td>string</td><td>да</td><td>ФИО</td></tr> <tr><td>group</td><td>string</td><td>нет</td><td>группа</td></tr> <tr><td>status</td><td>enum</td><td>да</td><td> <span class="badge active">active</span> <span class="badge later">enrolled_later</span> <span class="badge expelled">expelled</span> <span class="badge transferred">transferred</span> </td></tr> <tr><td>enrollDate</td><td>date</td><td>усл.</td><td>для <code>enrolled_later</code></td></tr> <tr><td>orderRef</td><td>string</td><td>усл.</td><td>«Приказ № __ от __.__»</td></tr> <tr><td>isSVO</td><td>bool</td><td>да</td><td><span class="badge svo">член семьи участника СВО</span></td></tr> <tr> <td rowspan="4"><strong>Mark</strong></td> <td>studentId</td><td>uuid</td><td>да</td><td>FK → Student</td> </tr> <tr><td>date</td><td>date</td><td>да</td><td>календарный день</td></tr> <tr><td>code</td><td>enum</td><td>да</td><td><code>""</code> · <code>н</code> · <code>б</code> · <code>х</code> · <code>-</code></td></tr> <tr><td>dayType</td><td>enum</td><td>да</td><td><code>study</code> · <code>practice</code> · <code>holiday</code></td></tr> <tr> <td rowspan="5"><strong>SickLeave</strong></td> <td>id</td><td>uuid</td><td>да</td><td>—</td> </tr> <tr><td>studentId</td><td>uuid</td><td>да</td><td>FK → Student</td></tr> <tr><td>dateFrom</td><td>date</td><td>да</td><td>начало</td></tr> <tr><td>dateTo</td><td>date</td><td>да</td><td>конец</td></tr> <tr><td>note</td><td>string</td><td>нет</td><td>№ справки / примечание</td></tr> <tr> <td rowspan="4"><strong>Settings</strong></td> <td>sheetUrl</td><td>string</td><td>да</td><td>published CSV / gviz</td> </tr> <tr><td>institutionHeader</td><td>html</td><td>да</td><td>шапка учреждения</td></tr> <tr><td>curatorName</td><td>string</td><td>да</td><td>подпись куратора</td></tr> <tr><td>executorName</td><td>string</td><td>да</td><td>отв. исполнитель</td></tr> </table> <!-- 3. Формулы --> <h2><span class="num">3</span> Формулы подсчёта</h2> <table border="1"> <caption>D1 — Калькулятор</caption> <tr><th>Показатель</th><th>Формула</th><th>Замечание</th></tr> <tr> <td><strong>Учебные дни</strong></td> <td>Σ Mark[dayType=study ∧ code ∈ { <code>""</code>, <code>х</code> }]</td> <td><code>х</code> считается как присутствие после даты зачисления</td> </tr> <tr> <td><strong>Больничный лист</strong></td> <td>Σ Mark[code=<code>б</code>] ∧ пересечение с SickLeave</td> <td>Справка автоматически проставляет <code>б</code></td> </tr> <tr> <td><strong>Практика</strong></td> <td>Σ Mark[dayType=practice ∧ code ≠ <code>-</code>]</td> <td>Тип дня задаётся на уровне импорта</td> </tr> <tr> <td><strong>Итого</strong></td> <td>учебные + больничные + практика</td> <td>Обязано совпасть с «Всего» в журнале (проверка D3)</td> </tr> <tr> <td><strong>Отчислен / переведён</strong></td> <td colspan="2">Отдельная строка с <code>colspan</code> и номером приказа, не входит в итог</td> </tr> </table> <!-- 4. Попытка по таблице --> <h2><span class="num">4</span> Что получено по таблице</h2> <div class="callout warn"> <strong>Данные не пришли</strong> Сервер снова получил только оболочку Google Sheets (加载… / 只能查看). Ссылка ведёт на <code>/edit</code>, а не на опубликованный CSV; прямой доступ требует авторизации или публикации. Поэтому <strong>М1 (загрузчик)</strong> пока писать преждевременно: неизвестно, матрица там или «ответы формы», какие столбцы и как обозначены практика и приказы. </div> <!-- 5. Что нужно прислать --> <h2><span class="num">5</span> Что нужно прислать для старта М1</h2> <table border="1"> <caption>Любой из трёх вариантов разблокирует модуль (а)</caption> <tr><th>#</th><th>Вариант</th><th>Как получить</th><th>Что проверю</th></tr> <tr> <td>1</td> <td><strong>Published CSV (приоритет)</strong></td> <td> В таблице: <em>Файл → Поделиться → Опубликовать в интернете → лист «Посещаемость» → CSV → Опубликовать</em>. Ссылка вида:<br> <code>https://docs.google.com/spreadsheets/d/1Ug42jUJU888ck-i4Fp93_JD5roZSYZTauGrktPSaJb8/export?format=csv&amp;gid=2012058345</code> </td> <td>Шапка, столбцы, типы дат, отметки <code>""</code> / <code>н</code> / <code>б</code> / <code>х</code> / <code>-</code></td> </tr> <tr> <td>2</td> <td><strong>gviz CSV</strong></td> <td> <code>https://docs.google.com/spreadsheets/d/1Ug42jUJU888ck-i4Fp93_JD5roZSYZTauGrktPSaJb8/gviz/tq?tqx=out:csv&amp;gid=2012058345</code> — откройте в браузере; если скачивается csv — пришлите файл или содержимое. </td> <td>То же</td> </tr> <tr> <td>3</td> <td><strong>Скриншот шапки + 5 строк</strong></td> <td>ФИО можно замазать; нужны шапка столбцов (№, ФИО, 01…31) и 5 реальных строк, включая одну с <code>х</code> и одну с <code>-</code>.</td> <td>Структура, обозначения, наличие практики и приказов</td> </tr> </table> <!-- 6. Образцы документов --> <h2><span class="num">6</span> Образцы трёх документов</h2> <ul> <li><strong>Сводный журнал</strong> — образец (скрин / HTML / Excel): шапка учреждения, объединённые ячейки дат, столбец «Всего», подписи.</li> <li><strong>Табель частичной компенсации</strong> — образец.</li> <li><strong>Табель СВО</strong> — образец + список льготников (или подтверждение, что ставим флажки вручную).</li> <li><strong>Правила</strong>: практика (лист / столбец / даты / ручной ввод), формат «Приказ № __ от __.__», перечень учебных дней месяца.</li> </ul> <!-- 7. План этапа 2 --> <h2><span class="num">7</span> План Этапа 2</h2> <div class="plan"> <div class="step"><span class="idx">а</span><strong>Загрузчик</strong><span>Парсинг CSV, нормализация в Student[] + Mark[]</span></div> <div class="step"><span class="idx">б</span><strong>Посещаемость</strong><span>Матрица студент × дата, правка отметок, флажок СВО</span></div> <div class="step"><span class="idx">в</span><strong>Справки</strong><span>Диапазон «с–по», автопроставление «б», валидация</span></div> <div class="step"><span class="idx">г</span><strong>Сводный журнал</strong><span>Генератор с colspan / rowspan и «Всего»</span></div> <div class="step"><span class="idx">д</span><strong>Табели</strong><span>Частичная компенсация + СВО</span></div> <div class="step"><span class="idx">е</span><strong>Экспорт</strong><span>HTML / XLS (Blob) / PDF (print-CSS)</span></div> </div> <!-- 8. Вопросы --> <h2><span class="num">8</span> Вопросы</h2> <ol> <li>Можете ли опубликовать лист «Посещаемость» как CSV по инструкции выше и прислать <code>export?format=csv</code>-ссылку? Если нет — пришлите скриншот шапки + 5 строк.</li> <li>Что содержит лист «(Ответы)» — ответы Google Forms (одна строка = один ответ) или матрица «студент × даты»? От этого зависит парсер М1.</li> <li>Есть ли отдельные листы под сводный журнал / табель ЧК / табель СВО? Пришлите по скриншоту — будут эталоном форматирования.</li> <li>Обозначения подтверждены: <code>""</code> — присутствовал, <code>н</code> — отсутствовал, <code>б</code> — больничный, <code>х</code> — зачислен позже, <code>-</code> — отчислен / переведён?</li> <li>Как обозначена практика (лист / столбец / отдельные даты / ручной ввод)?</li> <li>Где берём номер приказа для отчисленных и переведённых — столбец в таблице или ввод в приложении?</li> <li>СВО: флажки вручную в приложении или берём из столбца-флага в таблице?</li> <li>Шапка учреждения и подписи — пришлёте точный текст или делаем редактируемыми в настройках?</li> <li>Одна группа = один журнал, или нужен переключатель нескольких групп?</li> </ol> <div class="cta"> <strong>Следующий шаг.</strong> Как только пришлёте published-CSV (или gviz CSV, или скриншот шапки + 5 строк) и образцы трёх документов — я разберу структуру и в следующем сообщении выдам готовый модуль <strong>(а) «Загрузка из Google Sheets»</strong> с таблицей соответствия столбцов и вопросами после него. </div></div></body> </html>
+
+
